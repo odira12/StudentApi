@@ -1,5 +1,3 @@
-const { READCOMMITTED } = require("sequelize/types/table-hints")
-
 module.exports=(sequelize, DataTypes)=>{
 const student = sequelize.define('student',{
     student_id:{
@@ -19,6 +17,6 @@ const student = sequelize.define('student',{
         type:DataTypes.STRING,
         allowNull: false,
     },
-})
+});
  return student
 }
