@@ -21,7 +21,7 @@ db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
 db.student = require("./studentModel")(sequelize, DataTypes);
-// db.course = require("./courseModel")(sequelize, DataTypes);
+db.course = require("./courseModel")(sequelize, DataTypes);
 // db.reg = require("./regModel")(sequelize, DataTypes);
 
 db.sequelize.sync({force: false})
