@@ -54,4 +54,20 @@ module.exports = {
             next(error)
         }
     },
+    // Delete Student by ID
+    deleteStudent: async(req, res, next) => {
+        try {
+            let id = req.params.id
+
+            const deleteStudent = await student.delete(req.body, {where: {student_id: id}})
+
+            if(!student) {
+                throw(createError(404, "Student does not exist."))
+            }
+            res.status(200).send(deleteStudent)
+        } catch (error) {
+            next(error)
+        }
+    },
 }
+
