@@ -1,5 +1,7 @@
 const db = require("../model/dbConnect");
 const student = db.student;
+const {SugnAccessToken} =require("../Helpers/jwtHelpers");
+
 module.exports = {
     // Add Student
     addStudent: async(req, res, next) => {

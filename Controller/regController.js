@@ -1,4 +1,6 @@
+const { signAccessToken } = require("../Helpers/jwtHelpers");
 const db = require("../model/dbConnect");
+const createError = require("http-errors");
 
 const reg = db.reg;
 
@@ -8,16 +10,18 @@ module.exports = {
 
     addReg: async(req, res, next) => {
         try {
-            let info = {
-                regName: req.body.regName,
-                regEmail: req.body.regEmail,
-                regPassword: req.body.regPassword,
-            }
+            const {email, password} = req.body;
+            const exist = await UserActivation.findOne({where: {email}});
+            if (exist) {
+                throw createError.Conflict('${email} is already in use');
+            } 
+            const newUser = new User({email, password})
+            const saveUser = await newUser.save()
 
-            const addReg = await reg.create(info)
+            const accessToken = await signAccessToken(saveUser.reg_id);
+            res.status(200).send({accessToken})
 
-            res.status(200).send(addReg)
-        } catch (error) {
+            } catch (error) {
             next(error)
         }
     },

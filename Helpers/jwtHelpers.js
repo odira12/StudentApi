@@ -1,6 +1,6 @@
 const JWT = require('jsonwebtoken');
 const createError = require('http-error');
-const user = require('../Model/User.model');
+// const user = require('../Model/User.model');
 
 
 module.exports ={
@@ -10,7 +10,7 @@ module.exports ={
             const secret = process.env.ACCESS_TOKEN_SECRET;
             const options ={
                     expiresIn: '10m',
-                    issuer: 'EddTechnologies.com',
+                    issuer: 'LizTechnologies.com',
                     audience: UserId.toString(),
             }
             JWT.sign(payload,secret, options, (error, token)=>{
@@ -45,7 +45,7 @@ module.exports ={
             const sectret = process.env.REFRESH_TOKEN_SECRET;
             const options = {
                 expiresIn: '1y',
-                issuer: "EddTechnologies.com",
+                issuer: "LizTechnologies.com",
                 audience: UserId.toString(),
             }
             JWT.sign(payload, secret, options, (error, token) => {

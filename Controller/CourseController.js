@@ -1,3 +1,4 @@
+const { signAccessToken } = require("../Helpers/jwtHelpers");
 const db = require("../model/dbConnect");
 const course = db.course;
 module.exports = {
@@ -6,10 +7,13 @@ module.exports = {
 
     addCourse: async(req, res, next) => {
         try {
+            
             let info = {
                 courseName: req.body.courseName,
             }
             const addCourse = await course.create(info)
+            const accessToken = await signAccessToken(addCourse._id);
+            res.status(201).
             res.status(200).send(addCourse)
         } catch (error) {
             next(error)
