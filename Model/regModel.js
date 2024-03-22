@@ -23,5 +23,7 @@ module.exports = (sequelize, DataTypes) => {
         },
     });
 
+    // Function to hash password berore saving
+
     return Reg;
 }
