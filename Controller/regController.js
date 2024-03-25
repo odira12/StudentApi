@@ -1,6 +1,5 @@
 const { signAccessToken } = require("../Helpers/jwtHelpers");
 const db = require("../model/dbConnect");
-const createError = require("http-errors");
 const {authSchema} = require("../Helpers/validateSchema")
 
 const reg = db.reg;
@@ -11,12 +10,12 @@ module.exports = {
 
     addReg: async(req, res, next) => {
         try {
-            const {email, password} = await authSchema.validateAsync (eq.body);
-            const exist = await UserActivation.findOne({where: {email}});
+            const {regName, regEmail, regPassword} = await authSchema.validateAsync (req.body);
+            const exist = await reg.findOne({where: {regEmail}});
             if (exist) {
-                throw createError.Conflict('${email} is already in use');
+                throw createError.Conflict(`${email} is already in use`);
             } 
-            const newUser = new User({email, password})
+            const newUser = new reg({regName, regEmail, regPassword})
             const saveUser = await newUser.save()
 
             const accessToken = await signAccessToken(saveUser.reg_id);

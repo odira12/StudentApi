@@ -18,5 +18,6 @@ const student = sequelize.define('student',{
         allowNull: false,
     },
 });
+
  return student
 }
