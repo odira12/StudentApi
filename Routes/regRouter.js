@@ -6,5 +6,6 @@ router.get("/getAllReg", regController.getAllReg);
 router.get("/getReg/:id", regController.getReg);
 router.post("/addReg", regController.addReg);
 router.patch("/updateReg/:id", regController.updateReg);
+router.post("/loginUser/:id", regController.loginUser);
 
 module.exports = router;
