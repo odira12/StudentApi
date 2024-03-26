@@ -1,5 +1,5 @@
 const JWT = require('jsonwebtoken');
-const createError = require('http-error');
+const createError = require('http-errors');
 // const user = require('../Model/User.model');
 
 
@@ -33,7 +33,7 @@ module.exports ={
                 if (err.name === 'jsonWebtokenError'){
                     return next(createError.authorized())
                 }else{
-                    return next(createError.authorized(err.massege)) 
+                    return next(createError.authorized(err.messege)) 
             }
             }
         })
@@ -42,7 +42,7 @@ module.exports ={
     signRefreshToken:(UserId) => {
         return new Promise((resolve, reject) => {
             const payload = {}
-            const sectret = process.env.REFRESH_TOKEN_SECRET;
+            const secret = process.env.REFRESH_TOKEN_SECRET;
             const options = {
                 expiresIn: '1y',
                 issuer: "LizTechnologies.com",

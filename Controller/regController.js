@@ -1,6 +1,8 @@
 const { signAccessToken } = require("../Helpers/jwtHelpers");
+const { signRefreshToken } = require("../Helpers/jwtHelpers");
 const db = require("../model/dbConnect");
 const {authSchema} = require("../Helpers/validateSchema")
+const createHttpError = require('http-errors')
 
 const reg = db.reg;
 
@@ -30,17 +32,17 @@ module.exports = {
     loginUser: async (req, res, next) => {
         try {
             const result = await authSchema.validateAsync(req.body);
-            const user = await reg.findOne({where: {email: result.regEmail}})
+            const user = await reg.findOne({where: {regEmail: result.regEmail}})
 
             if (!user) throw createHttpError.NotFound("User not registered");
 
             // Watching the password
-            const isMatch = await reg.isValidPassword(result.regPassword);
+            const isMatch = await user.isValidPassword(result.regPassword);
             if (!isMatch) throw createHttpError.Unauthorized("Invalid Password");
 
             // If password matches, then generate token
-            const accessToken = await signAccessToken(reg_id);
-            const refreshToken = await signAccessToken(reg_id);
+            const accessToken = await signAccessToken(user.reg_id);
+            const refreshToken = await signRefreshToken(user.reg_id);
 
             res.send({accessToken, refreshToken})
         } catch (error) {
