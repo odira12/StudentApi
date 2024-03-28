@@ -15,7 +15,7 @@ module.exports = {
             const {regName, regEmail, regPassword} = await authSchema.validateAsync (req.body);
             const exist = await reg.findOne({where: {regEmail}});
             if (exist) {
-                throw createError.Conflict(`${email} is already in use`);
+                throw createHttpError.Conflict(`${regEmail} is already in use`);
             } 
             const newUser = new reg({regName, regEmail, regPassword})
             const saveUser = await newUser.save()

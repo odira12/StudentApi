@@ -1,5 +1,6 @@
 const JWT = require('jsonwebtoken');
-const createError = require('http-errors');
+const createHttpError = require('http-errors');
+
 // const user = require('../Model/User.model');
 
 
@@ -16,7 +17,7 @@ module.exports ={
             JWT.sign(payload,secret, options, (error, token)=>{
                 if (error) {
                     console.log(error.massege)
-                    reject(createError.InternalServerError());
+                    reject(createHttpError.InternalServerError());
                 }
                 resolve(token);
             })
@@ -24,16 +25,16 @@ module.exports ={
     },
 
     verifyAccessToken:(req, res, next)=>{
-        if(!req.headers['authorization']) return next(createError.authorized())
+        if(!req.headers['authorization']) return next(createHttpError.Unauthorized())
         const authHeader = req.headers['authorization']
         const bearerToken = authHeader.split('')
         const token = bearerToken[1]
         JWT.verify(token,process.env.ACCESS_TOKEN_SECRET,(err, payload)=>{
             if(err){
                 if (err.name === 'jsonWebtokenError'){
-                    return next(createError.authorized())
+                    return next(createHttpError.Unauthorized())
                 }else{
-                    return next(createError.authorized(err.messege)) 
+                    return next(createHttpError.Unauthorized(err.messege)) 
             }
             }
         })
@@ -51,7 +52,7 @@ module.exports ={
             JWT.sign(payload, secret, options, (error, token) => {
                 if(error) {
                     console.log(error.message)
-                    reject(createError.InternalServerError())
+                    reject(createHttpError.InternalServerError())
                 }
                 resolve(token);
             })
@@ -61,7 +62,7 @@ module.exports ={
     verifyRefreshToken:(refreshToken) => {
         return new Promise((resolve, reject) => {
             JWT.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, payload) => {
-                if(err) return reject(createError.Unauthorized())
+                if(err) return reject(createHttpError.Unauthorized())
                 const userId = payload.aud
             resolve(userId.toString())
             })
